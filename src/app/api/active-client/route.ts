@@ -20,10 +20,11 @@ export async function GET(request: Request) {
         }, { status: 404 })
     }
 
-    const info: { id: string, name: string, folder: Folder | null } = {
+    const info: { id: string, name: string, folder: Folder | null, count: number } = {
         id: seachedClient.id,
         name: seachedClient.name,
-        folder: seachedClient.folder || null
+        folder: seachedClient.folder || null,
+        count: Math.floor(Math.random() * 1000)
     }
 
     return Response.json({

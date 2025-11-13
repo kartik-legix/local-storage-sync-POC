@@ -31,6 +31,7 @@ function TopBar() {
                 <div className='flex items-center gap-2 text-xs'>
                     <svg xmlns="http://www.w3.org/2000/svg" className='size-2.5' width="12" height="12" viewBox="0 0 12 12"><title>radio-checked</title><g fill="currentColor"><path d="m6,0C2.691,0,0,2.691,0,6s2.691,6,6,6,6-2.691,6-6S9.309,0,6,0Zm0,9c-1.654,0-3-1.346-3-3s1.346-3,3-3,3,1.346,3,3-1.346,3-3,3Z" strokeWidth="0"></path></g></svg>
                     <p>{topbarDetails?.name || 'No client'}</p>
+                    <p> - {topbarDetails?.count}</p>
                 </div>
             </div>
 

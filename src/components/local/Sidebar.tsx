@@ -1,7 +1,11 @@
+import { folders } from '@/data/folders'
+import useLocalSync from '@/hooks/useLocalSync'
 import { useEffect, useState } from 'react'
 
 function Sidebar() {
     const [sidebarList, setSidebarList] = useState<SidebarList>([])
+
+    const [val, setVal] = useLocalSync<{ clientId: string, folderId: string | null } | null>('client-folder-change', null)
 
     useEffect(() => {
         fetch('/api/sidebar')
@@ -14,6 +18,104 @@ function Sidebar() {
                 console.log(err)
             })
     }, [])
+
+    useEffect(() => {
+        if (!val || !sidebarList.length) return
+
+        const { clientId, folderId } = val
+        
+        // Check if client is outside (not in a folder)
+        const clientOutside = sidebarList.find(i => i.id === clientId && i.type === 'client')
+        
+        if (clientOutside) {
+            // Case 1: Move client from outside to folder
+            if (folderId) {
+                const newList = sidebarList
+                    .filter(i => i.id !== clientId)
+                    .map(item => {
+                        if (item.id === folderId && item.type === 'folder') {
+                            return {
+                                ...item,
+                                clientItems: [...item.clientItems, {
+                                    id: clientId,
+                                    name: clientOutside.name,
+                                    type: 'client' as const
+                                }]
+                            }
+                        }
+                        return item
+                    })
+                setSidebarList(newList)
+            }
+        } else {
+            // Client is in a folder - find which folder
+            const sourceFolder = sidebarList.find(
+                (i): i is SidebarFolderItem => 
+                    i.type === 'folder' && 
+                    i.clientItems.some(c => c.id === clientId)
+            )
+            
+            if (sourceFolder) {
+                const clientItem = sourceFolder.clientItems.find(c => c.id === clientId)
+                if (!clientItem) return
+                
+                if (folderId) {
+                    // Case 2: Move client from folder A to folder B
+                    let targetFolderFound = false
+
+                    const mappedList = sidebarList.map(item => {
+                        if (item.type === 'folder') {
+                            if (item.id === sourceFolder.id) {
+                                // Remove from source folder
+                                return {
+                                    ...item,
+                                    clientItems: item.clientItems.filter(c => c.id !== clientId)
+                                }
+                            }
+
+                            if (item.id === folderId) {
+                                targetFolderFound = true
+                                // Add to target folder
+                                return {
+                                    ...item,
+                                    clientItems: [...item.clientItems, {
+                                        id: clientId,
+                                        name: clientItem.name,
+                                        type: 'client' as const
+                                    }]
+                                }
+                            }
+                        }
+
+                        return item
+                    })
+
+                    const newList = targetFolderFound
+                        ? mappedList
+                        : [...mappedList, {
+                            id: clientId,
+                            name: clientItem.name,
+                            type: 'client' as const
+                        }]
+
+                    setSidebarList(newList)
+                } else {
+                    // Case 3: Move client from folder to outside
+                    const newList = sidebarList.map(i => 
+                        i.type === 'folder' && i.id === sourceFolder.id
+                            ? { ...i, clientItems: i.clientItems.filter(c => c.id !== clientId) }
+                            : i
+                    )
+                    newList.push({
+                        id: clientId,
+                        name: clientItem.name,
+                        type: 'client' as const
+                    })
+                    setSidebarList(newList)
+                }
+            }
+        }
+    }, [val])
 
     return (
         <div className='w-[290px] p-3 space-y-2 border-r border-white/10'>
