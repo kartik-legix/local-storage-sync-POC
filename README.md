@@ -53,6 +53,12 @@ Navigate to [http://localhost:3000/local/test](http://localhost:3000/local/test)
 
 ---
 
+### View Zustand Comparison
+
+Navigate to [branch - compare-zustand](https://github.com/kartik-legix/local-storage-sync-POC/tree/compare-zustand) to view the Zustand comparison.
+
+---
+
 ## The `useLocalSync` Hook
 
 ### Overview
@@ -425,14 +431,6 @@ For detailed test results, see [TESTING_REPORT.md](./TESTING_REPORT.md)
 - [Zod Documentation](https://zod.dev) - TypeScript-first schema validation
 - [localStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) - Web Storage API
 - [StorageEvent](https://developer.mozilla.org/en-US/docs/Web/API/StorageEvent) - Cross-tab communication
-
----
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 ---
 
