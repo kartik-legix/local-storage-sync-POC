@@ -11,7 +11,8 @@ function ClientInfo() {
 
     const [loading, setLoading] = useState(true)
 
-    const [val, setVal] = useLocalSync<{ clientId: string, folderId: string | null } | null>('client-folder-change', null)
+    // ✨ Just pass the event name - types and validation are automatic!
+    const [val, setVal] = useLocalSync('client-folder-change')
 
     useEffect(() => {
         if (!id) {
