@@ -7,7 +7,8 @@ function Center() {
     const [clientsList, setClientsList] = useState<ClientsList>([])
     const [id, setId] = useQueryState('id')
 
-    const [val, setVal] = useLocalSync<{ clientId: string, folderId: string | null } | null>('client-folder-change', null)
+    // ✨ Just pass the event name - types and validation are automatic!
+    const [val, setVal] = useLocalSync('client-folder-change')
 
     useEffect(() => {
         fetch('/api/list')

@@ -4,7 +4,8 @@ import React from 'react'
 
 function FolderSelector({ clientId, folder, onChange }: { clientId: string, folder: Folder | null, onChange: (folderId: string) => void }) {
 
-    const [val, setVal] = useLocalSync<{ clientId: string, folderId: string | null } | null>('client-folder-change', null)
+    // ✨ Just pass the event name - types and validation are automatic!
+    const [val, setVal] = useLocalSync('client-folder-change')
 
     const handleChange = (folderId: string) => {
         setVal({ clientId, folderId: folderId === 'None' ? null : folderId })

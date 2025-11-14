@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react'
 function Sidebar() {
     const [sidebarList, setSidebarList] = useState<SidebarList>([])
 
-    const [val, setVal] = useLocalSync<{ clientId: string, folderId: string | null } | null>('client-folder-change', null)
+    // ✨ Just pass the event name - types and validation are automatic!
+    const [val, setVal] = useLocalSync('client-folder-change')
 
     useEffect(() => {
         fetch('/api/sidebar')
